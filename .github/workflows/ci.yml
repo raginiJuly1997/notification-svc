@@ -1,0 +1,30 @@
+name: Notification Service CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Build and test
+        env:
+          JWT_SECRET: "Y2ktb25seS10ZXN0LXNlY3JldC1rZXktZm9yLWp3dC1zaWduaW5nLTEyMzQ1Njc4OTA="
+          KAFKA_BOOTSTRAP_SERVERS: "localhost:9092"
+        run: chmod +x mvnw && ./mvnw -B verify
